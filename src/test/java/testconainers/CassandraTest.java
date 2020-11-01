@@ -24,7 +24,7 @@ public class CassandraTest {
 
     @Container
     public static final CassandraContainer<?> cassandra =
-            new CassandraContainer<>("testconainers.cassandra:3.11.2");
+            new CassandraContainer<>("cassandra:3.11.2");
 
 
     @Test

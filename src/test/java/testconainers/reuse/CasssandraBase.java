@@ -1,14 +1,18 @@
 package testconainers.reuse;
 
 
+import testconainers.wrapper.CassandraContainerWrapper;
+
 public abstract class CasssandraBase {
 
-    static final CassandraContainer<?> CASSANDRA_CONTAINER;
+    static final CassandraContainerWrapper CASSANDRA_CONTAINER;
 
     static {
-        CASSANDRA_CONTAINER = new CassandraContainer<>("testconainers.cassandra:3.11.2")
+        CASSANDRA_CONTAINER = (CassandraContainerWrapper) new CassandraContainerWrapper("cassandra:3.11.2")
                 .withNetwork(null)
-                .withReuse(true);
+                .withReuse(true)
+                .withLabel("reuse.image.name", "reuse-test");
+
         CASSANDRA_CONTAINER.start();
     }
 

@@ -1,5 +1,8 @@
 package testconainers.cassandra;
 
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Metadata;
+import com.datastax.driver.core.Session;
 import testconainers.config.ConnectionCfg;
 import testconainers.constant.TestContainerConstant;
 import org.slf4j.Logger;

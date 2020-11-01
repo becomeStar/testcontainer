@@ -1,5 +1,8 @@
 package testconainers.compose;
 
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.mapping.Mapper;
+import com.datastax.driver.mapping.MappingManager;
 import testconainers.cassandra.CassandraManager;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -17,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import testconainers.object.StorageDataKey;
 
-import java.sql.PreparedStatement;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;

@@ -5,7 +5,7 @@ public class TestContainerConstant {
     public static final String KEYSPACE_QUERY = "CREATE KEYSPACE IF NOT EXISTS test WITH replication = \n" +
             "{'class':'SimpleStrategy','replication_factor':'1'};";
 
-    public static final String TABLE_CREATE_QUERY = "CREATE TABLE test.item(storage_key text PRIMARY KEY, "
+    public static final String TABLE_CREATE_QUERY = "CREATE TABLE IF NOT EXISTS test.item(storage_key text PRIMARY KEY, "
             + "create_time bigint );";
 
     public static final String INSERT_PREPARED_STATEMENT = "INSERT into test.item (storage_key, create_time) VALUES "

@@ -1,4 +1,4 @@
 localstack:
   image: localstack/localstack:0.11.3
 cassandra:
-  image: testconainers.cassandra:3.11.2
+  image: cassandra:3.11.2
