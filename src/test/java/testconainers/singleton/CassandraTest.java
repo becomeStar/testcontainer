@@ -1,14 +1,14 @@
-package testconainers;
+package testconainers.singleton;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.CassandraContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.TestInstance;
 import testconainers.object.StorageDataKey;
 
 import java.time.LocalDateTime;
@@ -18,18 +18,15 @@ import java.util.stream.IntStream;
 
 import static testconainers.constant.TestContainerConstant.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Testcontainers
-public class CassandraTest {
-
-    @Container
-    public static final CassandraContainer<?> cassandra =
-            new CassandraContainer<>("testconainers.cassandra:3.11.2");
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class CassandraTest extends AbstractContainerBaseTest{
 
 
-    @Test
-    public void test() {
-        Cluster cluster = cassandra.getCluster();
+    @BeforeAll
+    void setUp() {
+        Cluster cluster = CASSANDRA_CONTAINER.getCluster();
 
         try (Session session = cluster.connect()) {
 
@@ -49,6 +46,20 @@ public class CassandraTest {
                             session.execute(prepared.bind("storage_garbage_key_" + i,
                                     LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()))
                     );
+        }
+    }
+
+    @AfterAll
+    void confirmContainerIsRunning() {
+        assertTrue(LOCAL_STACK_CONTAINER.isRunning());
+        assertTrue(CASSANDRA_CONTAINER.isRunning());
+    }
+
+    @Test
+    public void test() {
+        Cluster cluster = CASSANDRA_CONTAINER.getCluster();
+
+        try (Session session = cluster.connect()) {
 
             MappingManager mappingManager = new MappingManager(session);
             Mapper<StorageDataKey> m = mappingManager.mapper(StorageDataKey.class);
@@ -56,7 +67,6 @@ public class CassandraTest {
             List<StorageDataKey> result = m.map(session.execute(SELECT_QUERY)).all();
 
             assertEquals(200, result.size());
-
 
         }
     }

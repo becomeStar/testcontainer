@@ -1,4 +1,4 @@
-package config;
+package testconainers.config;
 
 import lombok.Builder;
 import lombok.Getter;

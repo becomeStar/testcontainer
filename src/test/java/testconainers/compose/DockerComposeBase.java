@@ -17,13 +17,11 @@ public abstract class DockerComposeBase {
     static {
         DOCKER_COMPOSE_CONTAINER =
                 new DockerComposeContainer<>(
-                        new File("src/test/resources/s3-cassandra.yml"))
+                        new File("src/test/resources/docker-compose.yml"))
                         .withExposedService("localstack_1", LOCALSTACK_S3_PORT)
                         .withExposedService("cassandra_1", CASSANDRA_PORT,
                                 Wait.forListeningPort().withStartupTimeout(Duration.ofSeconds(30)));
 
         DOCKER_COMPOSE_CONTAINER.start();
     }
-
-
 }

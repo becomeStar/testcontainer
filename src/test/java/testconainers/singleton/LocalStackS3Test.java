@@ -1,4 +1,4 @@
-package testconainers;
+package testconainers.singleton;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -7,41 +7,31 @@ import com.amazonaws.services.s3.model.DeleteObjectsResult;
 import com.amazonaws.services.s3.model.ListObjectsV2Request;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.testcontainers.containers.localstack.LocalStackContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static testconainers.constant.TestContainerConstant.BUCKET_NAME;
-import static testconainers.constant.TestContainerConstant.NORMAL_DATA;
-import static testconainers.constant.TestContainerConstant.GARBAGE_DATA;
-
+import static testconainers.constant.TestContainerConstant.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
-@Testcontainers
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class LocalStackS3Test {
-
-    @Container
-    private static final LocalStackContainer container = new LocalStackContainer(DockerImageName.parse("localstack/localstack:0.11.3"))
-            .withServices(LocalStackContainer.Service.S3);
+public class LocalStackS3Test extends AbstractContainerBaseTest{
 
     private AmazonS3 amazonS3;
-
 
     @BeforeAll
     void testDataSetup() {
         amazonS3 = AmazonS3ClientBuilder.standard()
-                .withEndpointConfiguration(container.getEndpointConfiguration(LocalStackContainer.Service.S3))
-                .withCredentials(container.getDefaultCredentialsProvider())
+                .withEndpointConfiguration(LOCAL_STACK_CONTAINER.getEndpointConfiguration(LocalStackContainer.Service.S3))
+                .withCredentials(LOCAL_STACK_CONTAINER.getDefaultCredentialsProvider())
                 .build();
 
         amazonS3.createBucket(BUCKET_NAME);
@@ -61,6 +51,13 @@ public class LocalStackS3Test {
         log.info("garbage data uploaded..");
 
     }
+
+    @AfterAll
+    void confirmAllContainerIsRunning() {
+        assertTrue(LOCAL_STACK_CONTAINER.isRunning());
+        assertTrue(CASSANDRA_CONTAINER.isRunning());
+    }
+
 
     @Test
     void s3GarbageDeleteTest()  {

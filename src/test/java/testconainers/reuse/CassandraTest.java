@@ -15,7 +15,7 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static constant.TestContainerConstant.*;
+import static testconainers.constant.TestContainerConstant.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

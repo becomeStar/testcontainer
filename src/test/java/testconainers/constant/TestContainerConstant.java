@@ -1,4 +1,4 @@
-package constant;
+package testconainers.constant;
 
 public class TestContainerConstant {
 

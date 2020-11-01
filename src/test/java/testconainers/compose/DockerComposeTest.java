@@ -1,16 +1,14 @@
 package testconainers.compose;
 
-import cassandra.CassandraManager;
+import testconainers.cassandra.CassandraManager;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.mapping.Mapper;
-import com.datastax.driver.mapping.MappingManager;
-import config.ConnectionCfg;
+
+import testconainers.config.ConnectionCfg;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.junit.jupiter.api.AfterAll;
@@ -19,13 +17,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import testconainers.object.StorageDataKey;
 
+import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.IntStream;
 
 import static com.amazonaws.auth.profile.internal.ProfileKeyConstants.REGION;
-import static constant.TestContainerConstant.*;
+import static testconainers.constant.TestContainerConstant.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
@@ -73,11 +72,6 @@ public class DockerComposeTest extends DockerComposeBase {
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials("foobar", "foobar")))
                 .withPathStyleAccessEnabled(true)
                 .build();
-
-        System.out.println("http://" +
-                DOCKER_COMPOSE_CONTAINER.getServiceHost("localstack_1", LOCALSTACK_S3_PORT) +
-                ":" +
-                DOCKER_COMPOSE_CONTAINER.getServicePort("localstack_1", LOCALSTACK_S3_PORT));
 
         amazonS3.createBucket(BUCKET_NAME);
         log.info("bucket created.. bucketName={}", BUCKET_NAME);

@@ -1,10 +1,7 @@
-package cassandra;
+package testconainers.cassandra;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Metadata;
-import com.datastax.driver.core.Session;
-import config.ConnectionCfg;
-import constant.TestContainerConstant;
+import testconainers.config.ConnectionCfg;
+import testconainers.constant.TestContainerConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +15,7 @@ public enum CassandraManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(CassandraManager.class);
 
     /**
-     * Connect to the cassandra database based on the connection configuration provided.
+     * Connect to the testconainers.cassandra database based on the connection configuration provided.
      * Multiple call to this method will have no effects if a connection is already established
      * @param conf the configuration for the connection
      */
@@ -37,10 +34,10 @@ public enum CassandraManager {
     }
 
     /**
-     * Invalidate and close the session and connection to the cassandra database
+     * Invalidate and close the session and connection to the testconainers.cassandra database
      */
     public void shutdown() {
-        LOGGER.info("Shutting down the whole cassandra cluster");
+        LOGGER.info("Shutting down the whole testconainers.cassandra cluster");
         if (null != session) {
             session.close();
         }
