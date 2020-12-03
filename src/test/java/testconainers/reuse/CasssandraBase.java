@@ -9,7 +9,6 @@ public abstract class CasssandraBase {
 
     static {
         CASSANDRA_CONTAINER = (CassandraContainerWrapper) new CassandraContainerWrapper("cassandra:3.11.2")
-                .withNetwork(null)
                 .withReuse(true)
                 .withLabel("reuse.image.name", "reuse-test");
 

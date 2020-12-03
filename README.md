@@ -38,7 +38,6 @@
   - ### GenericContainer를 통해 컨테이너를 실행시키기
 
     
-
     - ```
       @Testcontainers
       public class JedisTest {
@@ -135,7 +134,7 @@
         public class CassandraTest extends AbstractContainerBaseTest{
         	...
         	
-        	  @AfterAll
+        	@AfterAll
             void confirmContainerIsRunning() {
                 assertTrue(LOCAL_STACK_CONTAINER.isRunning());
                 assertTrue(CASSANDRA_CONTAINER.isRunning());
@@ -143,8 +142,6 @@
         
         }
         ```
-
-        
 
   - ### docker compose로 여러개의 컨테이너 실행시키기
 
@@ -186,6 +183,60 @@
     
 
   - ### 테스트를 수행시킬 때마다 컨테이너 재사용하기
-
-    - ~/.
-
+  
+    - 사전 작업
+      1. 설정 파일에서 reuse 프로퍼티 추가 (testcontainers.reuse.enable=true)
+          - Linux : /home/myuser/.testcontainers.properties
+          - Windows : C:/Users/myuser/.testcontainers.properties
+          - macOS : /Users/myuser/.testcontainers.properties   
+      2. reusability flag = true로 설정 (withReuse(true))
+    
+    - GenericContainer lifecycle method 재정의
+        - containerIsCreated(String)
+        - containerIsStarting(InspectContainerResponse, boolean)
+        - containerIsStarted(InspectContainerResponse, boolean)
+        - containerIsStopping(InspectContainerResponse)
+        - containerIsStopped(InspectContainerResponse)
+          
+            ```public class CassandraContainerWrapper extends CassandraContainer {
+             
+                 public CassandraContainerWrapper(String confluentPlatformVersion) {
+                     super(confluentPlatformVersion);
+                 }
+             
+                 @Override
+                 protected void containerIsStarted(InspectContainerResponse containerInfo, boolean reused) {
+                     if (!reused) {
+                         Cluster cluster = this.getCluster();
+                         try (Session session = cluster.connect()) {
+                             session.execute(KEYSPACE_QUERY);
+                             session.execute(TABLE_CREATE_QUERY);
+                             PreparedStatement prepared = session.prepare(INSERT_PREPARED_STATEMENT);
+             
+                             IntStream.range(1, 101)
+                                     .forEach(i ->
+                                             session.execute(prepared.bind("storage_data_key_" + i,
+                                                     LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()))
+                                     );
+                         }
+                     } 
+                 }
+             }
+          ```
+    - label 붙이기
+        ```public abstract class CasssandraBase {
+           
+               static final CassandraContainerWrapper CASSANDRA_CONTAINER;
+           
+               static {
+                   CASSANDRA_CONTAINER = (CassandraContainerWrapper) new CassandraContainerWrapper("cassandra:3.11.2")
+                           .withReuse(true)
+                           .withLabel("reuse.image.name", "reuse-test");
+           
+                   CASSANDRA_CONTAINER.start();
+               }
+           
+           }
+      ```
+        
+        

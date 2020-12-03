@@ -27,6 +27,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${log4j2.version}</version>
@@ -142,8 +148,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -152,6 +158,7 @@
     <properties>
         <junit.platform.version>1.5.0</junit.platform.version>
         <junit.vintage.version>5.5.0</junit.vintage.version>
+        <junit.jupiter.version>5.5.0</junit.jupiter.version>
         <log4j2.version>2.12.0</log4j2.version>
         <testcontainers.version>1.15.0-rc2</testcontainers.version>
         <postgresql.version>42.2.6</postgresql.version>
