@@ -184,21 +184,24 @@
 
   - ### 테스트를 수행시킬 때마다 컨테이너 재사용하기
   
-    - 사전 작업
+    - 컨테이너를 재사용하는 방법
       1. 설정 파일에서 reuse 프로퍼티 추가 (testcontainers.reuse.enable=true)
           - Linux : /home/myuser/.testcontainers.properties
           - Windows : C:/Users/myuser/.testcontainers.properties
           - macOS : /Users/myuser/.testcontainers.properties   
       2. reusability flag = true로 설정 (withReuse(true))
     
+    - 컨테이너가 
+    
     - GenericContainer lifecycle method 재정의
         - containerIsCreated(String)
-        - containerIsStarting(InspectContainerResponse, boolean)
-        - containerIsStarted(InspectContainerResponse, boolean)
+        - **containerIsStarting(InspectContainerResponse, boolean)**
+        - **containerIsStarted(InspectContainerResponse, boolean)**
         - containerIsStopping(InspectContainerResponse)
         - containerIsStopped(InspectContainerResponse)
           
-            ```public class CassandraContainerWrapper extends CassandraContainer {
+            ```
+          public class CassandraContainerWrapper extends CassandraContainer {
              
                  public CassandraContainerWrapper(String confluentPlatformVersion) {
                      super(confluentPlatformVersion);
@@ -223,20 +226,22 @@
                  }
              }
           ```
-    - label 붙이기
-        ```public abstract class CasssandraBase {
-           
-               static final CassandraContainerWrapper CASSANDRA_CONTAINER;
-           
-               static {
-                   CASSANDRA_CONTAINER = (CassandraContainerWrapper) new CassandraContainerWrapper("cassandra:3.11.2")
-                           .withReuse(true)
-                           .withLabel("reuse.image.name", "reuse-test");
-           
-                   CASSANDRA_CONTAINER.start();
-               }
-           
-           }
+          
+    - 테스트 컨테이너에 label을 붙여서 버전 관리
+       ```
+      public abstract class CasssandraBase {
+      
+          static final CassandraContainerWrapper CASSANDRA_CONTAINER;
+      
+          static {
+              CASSANDRA_CONTAINER = (CassandraContainerWrapper) new CassandraContainerWrapper("cassandra:3.11.2")
+                      .withReuse(true)
+                      .withLabel("reuse.image.name", "reuse-test-version-1");
+      
+              CASSANDRA_CONTAINER.start();
+          }
+      
+      }
       ```
         
         
