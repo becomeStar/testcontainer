@@ -1,7 +1,10 @@
 package testconainers.reuse;
 
 
+import com.github.dockerjava.api.command.CreateContainerCmd;
 import testconainers.wrapper.CassandraContainerWrapper;
+
+import java.util.function.Consumer;
 
 public abstract class CasssandraBase {
 
@@ -10,7 +13,7 @@ public abstract class CasssandraBase {
     static {
         CASSANDRA_CONTAINER = (CassandraContainerWrapper) new CassandraContainerWrapper("cassandra:3.11.2")
                 .withReuse(true)
-                .withLabel("reuse.image.name", "reuse-test-version-1");
+                .withLabel("reuse.cassandra.version", "cassandra-1");
 
         CASSANDRA_CONTAINER.start();
     }
