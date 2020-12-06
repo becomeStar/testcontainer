@@ -251,11 +251,9 @@
      - Windows : C:/Users/myuser/.testcontainers.properties
      - macOS :  /Users/myuser/.testcontainers.properties  
      
-
   2.  reusability flag = true로 설정 (withReuse(true))
 
      
-
 - 컨테이너 처음 생성시에만 테스트 데이터 초기화 동작을 수행
 
   -  GenericContainer lifecycle method 재정의
