@@ -256,7 +256,7 @@
      
 - 컨테이너 처음 생성시에만 테스트 데이터 초기화 동작을 수행
 
-  -  GenericContainer lifecycle method 재정의
+  - GenericContainer lifecycle method 재정의
 
     - containerIsCreated(String)
     - **containerIsStarting(InspectContainerResponse, boolean)**
