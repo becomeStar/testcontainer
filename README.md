@@ -78,22 +78,7 @@
 
     - Ryuk Container -> 테스트가 끝난 뒤 테스트를 위해 실행되었던 컨테이너를 중지하고 삭제시키는 역할을  하는 컨테이너 (https://github.com/testcontainers/moby-ryuk) 
 
-  - dockerfile로 직접 이미지 생성 후 컨테이너 실행도 가능
-
-    - ```
-      @Testcontainers
-      public class DockerFileCassandraTest {
       
-          @Container
-          public static final GenericContainer<?> cassandra =
-                  new GenericContainer<>(new ImageFromDockerfile()
-                          .withFileFromClasspath("Dockerfile", "dockerfile/cassandra/Dockerfile")
-                          .withFileFromClasspath("entrypoint-wrap.sh","dockerfile/cassandra/entrypoint-wrap.sh"))
-                          .withExposedPorts(9042);
-      ```
-
-      
-
 - ### Specialized Containers
 
   - GenericContainer 를 상속하고 특정한 모듈에 커스터마이징 된 컨테이너
@@ -213,7 +198,7 @@
                             new File("src/test/resources/docker-compose.yml"))
                             .withExposedService("localstack_1", LOCALSTACK_S3_PORT)
                             .withExposedService("cassandra_1", CASSANDRA_PORT,
-                                    Wait.forListeningPort().withStartupTimeout(Duration.ofSeconds(30)));
+                            Wait.forListeningPort().withStartupTimeout(Duration.ofSeconds(30)));
     
             DOCKER_COMPOSE_CONTAINER.start();
         }
@@ -240,7 +225,6 @@
     
 
 ## 테스트를 실행할 때마다 컨테이너 재사용
-
 
 
 - 컨테이너를 재사용하는 방법 
